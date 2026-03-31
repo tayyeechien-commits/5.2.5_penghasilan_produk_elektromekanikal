@@ -104,14 +104,14 @@
     @keyframes pulseButton { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
 
     /* --- [TV Area] --- */
-    #main-layout { display: none; align-items: center; gap: 30px; width: 98%; max-width: 1300px; }
+    #main-layout { display: none; align-items: flex-start; justify-content: space-between; gap: 18px; width: 95%; max-width: 1150px; padding-right: 18px; box-sizing: border-box; }
     #tv-frame {
-        width: 800px; aspect-ratio: 16 / 10;
-        background: #000; border: 12px solid var(--tv-border);
-        border-radius: 40px; position: relative;
-        box-shadow: 0 0 50px rgba(255, 215, 0, 0.4), 15px 15px 0px #000; overflow: hidden;
+        width: 680px; aspect-ratio: 16 / 9;
+        background: #000; border: 8px solid var(--tv-border);
+        border-radius: 32px; position: relative;
+        box-shadow: 0 0 40px rgba(255, 215, 0, 0.4), 12px 12px 0px #000; overflow: hidden;
     }
-    #inner-screen { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: #000; border-radius: 28px; overflow: hidden; z-index: 1; }
+    #inner-screen { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: #000; border-radius: 24px; overflow: hidden; z-index: 1; }
     
     #screen-content { 
         width: 100%; height: 100%; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -142,7 +142,46 @@
     .ep-card.active span { color: #00fbff; }
 
     /* --- Remote & Buttons --- */
-    #remote-area { flex: 0.5; background: #222; padding: 30px 20px; border-radius: 50px; border: 6px solid #444; box-shadow: 10px 10px 0px #000; display: flex; flex-direction: column; align-items: center; gap: 20px; }
+    #remote-area { flex: 0.42; background: #222; padding: 26px 18px; border-radius: 48px; border: 5px solid #444; box-shadow: 8px 8px 0px #000; display: flex; flex-direction: column; align-items: center; gap: 16px; }
+
+    #right-panel { flex: 0 0 150px; background: rgba(0,0,0,0.35); border: 2px solid #0ea5e9; border-radius: 26px; padding: 16px; min-height: 340px; color: #fff; box-shadow: 0 4px 16px rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; margin-left: -6px; }
+    #right-panel .car-emoji-only { font-size: 3rem; letter-spacing: 12px; text-align: center; word-break: keep-all; }
+    #right-panel h2 { display: none; }
+    #right-panel p { display: none; }
+
+    /* LED Strip */
+    .led-strip {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        margin-bottom: 10px;
+        padding: 10px;
+        background: #111;
+        border-radius: 20px;
+        border: 2px solid #333;
+    }
+    
+    .led {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: #333;
+        box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
+        animation: ledGlow 2s infinite;
+    }
+    
+    .led:nth-child(1) { animation-delay: 0s; }
+    .led:nth-child(2) { animation-delay: 0.5s; }
+    .led:nth-child(3) { animation-delay: 1s; }
+    .led:nth-child(4) { animation-delay: 1.5s; }
+    .led:nth-child(5) { animation-delay: 0.2s; }
+    .led:nth-child(6) { animation-delay: 0.7s; }
+    .led:nth-child(7) { animation-delay: 1.2s; }
+    
+    @keyframes ledGlow {
+        0%, 100% { background: #333; box-shadow: inset 0 0 5px rgba(0,0,0,0.5); }
+        50% { background: var(--led-blue); box-shadow: 0 0 10px var(--led-blue), inset 0 0 5px rgba(0,0,0,0.5); }
+    }
     .btn { width: 65px; height: 65px; background: #333; border: none; border-radius: 15px; color: white; font-weight: bold; cursor: pointer; box-shadow: 0 5px 0 #111; display: flex; justify-content: center; align-items: center; font-size: 1.2rem; transition: 0.1s; }
     #btn-ok { width: 75px; height: 75px; background: radial-gradient(#ffee00, #ffaa00); color: black; border-radius: 50%; box-shadow: 0 5px 0 #885500; }
     #btn-exit { background: #ff2e2e; width: 100px; height: 50px; border-radius: 25px; color: white; }
@@ -159,6 +198,19 @@
     }
     #music-control span { font-size: 0.8rem; margin-top: 2px; }
     #music-control:hover { transform: scale(1.15); box-shadow: 0 0 40px var(--led-blue); }
+
+    @media (max-width: 1150px) {
+        #main-layout { flex-direction: column; align-items: center; justify-content: center; gap: 18px; }
+        #tv-frame { width: 680px; }
+        #remote-area { width: 90%; max-width: 360px; }
+        #right-panel { width: 75%; max-width: 280px; min-height: 220px; }
+        #right-panel .car-emoji-only { font-size: 2.6rem; }
+    }
+
+    @media (max-width: 800px) {
+        #tv-frame { width: 100%; max-width: 560px; }
+        #right-panel { width: 90%; max-width: 320px; min-height: 180px; }
+    }
 
     @keyframes slowSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
     @keyframes fastSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
@@ -229,15 +281,26 @@
     </div>
 
     <div id="remote-area">
+        <div class="led-strip">
+            <div class="led"></div>
+            <div class="led"></div>
+            <div class="led"></div>
+            <div class="led"></div>
+            <div class="led"></div>
+            <div class="led"></div>
+            <div class="led"></div>
+        </div>
         <div class="d-pad-vertical">
             <button class="btn" id="btn-up">▲</button>
             <button class="btn" id="btn-ok">GO!</button>
             <button class="btn" id="btn-down">▼</button>
         </div>
         <div class="action-btns">
-            <button class="btn" id="btn-next" style="opacity: 0.3; cursor: not-allowed;">NEXT</button>
             <button class="btn" id="btn-exit">EXIT</button>
         </div>
+    </div>
+    <div id="right-panel">
+        <div class="car-emoji-only">🚗 🚙 🛻</div>
     </div>
 </div>
 
